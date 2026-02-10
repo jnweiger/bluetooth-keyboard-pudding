@@ -24,9 +24,10 @@ Instead, we can
 - and when properly set up, run a loop that listens for buttons and executs the corresponding commands.
 
 
-I am using this during presentations, to e.g. start a video, or switch to another presentaiton.
+I am using this during presentations, to e.g. start a video, or switch to another presentation.
 
 
+<pre>
 Libreoffice Impress -> Bildschirmpräsentation -> Präsentationseinstellungen
 	Fernsteuerung
 	[x] Fernsteuerung aktivieren
@@ -55,3 +56,6 @@ test -f /sys/module/bluetooth/parameters/hid_suspend && echo 0 | sudo tee /sys/m
 echo 'options bluetooth hid_suspend=0' | sudo tee /etc/modprobe.d/bt-nosleep.conf
 echo 1 | sudo tee /sys/class/input/input13/device/power/control
 echo 1 | sudo tee /sys/class/input/input14/device/power/control
+</pre>
+
+
