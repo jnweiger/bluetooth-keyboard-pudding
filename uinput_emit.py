@@ -1,9 +1,13 @@
 #! /usr/bin/python3
 #
+# (C) 2026, juergen@fabmail.org, distribute under GPLv2
+#
+# v1.0, jw  initial working version.
+#
 # Requires:
 #  sudo apt install python3-uinput
 #
-# Alternatives: 
+# Alternatives:
 #   - xdotool: works with X11
 #   - ytype: works with Wayland
 #   - ydotool: works partially with XWayland (Page_Down/Up doesn't work)
@@ -20,22 +24,26 @@ device = uinput.Device(list(uinput._CHAR_MAP.values()) + [
     uinput.KEY_LEFTALT,
 
     uinput.KEY_DELETE,
+    uinput.KEY_BACKSPACE,
     uinput.KEY_ESC,
     uinput.KEY_PAGEDOWN,
     uinput.KEY_PAGEUP,
     uinput.KEY_HOME,
     uinput.KEY_END,
     uinput.KEY_F5,
+    uinput.KEY_SPACE,
     uinput.KEY_ENTER
 ])
 
-_NAME_MAP = { 
-    'SHIFT': uinput.KEY_LEFTSHIFT, 
-    'CTRL':  uinput.KEY_LEFTCTRL, 
-    'ALT':   uinput.KEY_LEFTALT, 
+_NAME_MAP = {
+    'SHIFT': uinput.KEY_LEFTSHIFT,
+    'CTRL':  uinput.KEY_LEFTCTRL,
+    'ALT':   uinput.KEY_LEFTALT,
 
-    'DELETE':   uinput.KEY_DELETE, 
-    'DEL':      uinput.KEY_DELETE, 
+    'DELETE':    uinput.KEY_DELETE,
+    'DEL':       uinput.KEY_DELETE,
+    'BACKSPACE': uinput.KEY_BACKSPACE,
+    'BS':        uinput.KEY_BACKSPACE,
     'ESC':      uinput.KEY_ESC,
     'PAGEDOWN': uinput.KEY_PAGEDOWN,
     'PGDN':     uinput.KEY_PAGEDOWN,
@@ -44,6 +52,8 @@ _NAME_MAP = {
     'HOME':     uinput.KEY_HOME,
     'END':      uinput.KEY_END,
     'F5':       uinput.KEY_F5,
+    'SPACE':    uinput.KEY_SPACE,
+    ' ':        uinput.KEY_SPACE,
     'ENTER':    uinput.KEY_ENTER,
     'RETURN':   uinput.KEY_ENTER,
 }
@@ -85,4 +95,4 @@ for arg in sys.argv[1:]:
         for k in reversed(key_list):
            device.emit(k, 0)           # release
     device.syn()
- 
+

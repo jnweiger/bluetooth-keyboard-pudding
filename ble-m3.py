@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 #
+# (C) 2026, juergen@fabmail.org, distribute under GPLv2
+#
+# v1.0, jw  initial working version.
+#
+#
 ## prevent automatic usage of this device by wayland and allow normal users without sudo:
 # vi /etc/udev/rules.d/99-ble-m3.rules
 # # Stop libinput feeding events into X11 or wayland; Allow normal users to read BLE-M3 input devices
@@ -15,7 +20,7 @@
 #
 # Requires:
 #  - sudo apt install python3-evdev
-#  
+#
 
 
 import os, sys, re, time, select
@@ -166,7 +171,7 @@ def open_dev(cfg):
         sys.exit(1)
 
     seen_missing = False
-            
+
     kbd =   cfg["inputs"].get("kbd")
     mouse = cfg["inputs"].get("mouse")
     if debug: print("open_dev: ", kbd)
@@ -181,7 +186,7 @@ def open_dev(cfg):
             time.sleep(5)
         else:
             break
- 
+
     if debug: print("open_dev: ", mouse)
     while True:
         try:
@@ -194,7 +199,7 @@ def open_dev(cfg):
             time.sleep(5)
         else:
             break
- 
+
     if kbd_dev:
         kbd_dev.grab()
     if mouse_dev:
@@ -326,7 +331,7 @@ def cmd_record(name, script=None):
 
 
 def length_ratio20(s1, s2):
-    
+
     l1 = len(s1)
     l2 = len(s2)
     if l1 < l2:             # ensure, that l1 is the larger one.
@@ -346,7 +351,7 @@ def event_match_score(name, s1, s2):
     60--79: s1 is prefix match of s2 or vice versa.
     40--59: s1 is inside of s2 or vice versa.
     20--39: s1 and s2 have a common overlap.
-    
+
     The position in the match range reflects the number of matching words and ratio of the string lengths.
     """
     score = 0.0
@@ -376,9 +381,9 @@ def cmd_run():
 
     while True:
         km = open_dev(cfg)
-    
+
         if debug: print("Running...")
-    
+
         while True:
             try:
                 seq_seen = event_sequence(cfg, km)
@@ -390,7 +395,7 @@ def cmd_run():
                     s = event_match_score(name, seq_str, seq_wanted)
                     score[name] = max(s, score.get(name, 0))    # find the maximum score per name
                 if debug: print("score: ", score)
-    
+
                 best_name = max(score, key=score.get)
                 if score[best_name] >= min_score:
                     if debug: print("Matched:", best_name, scripts[best_name])
@@ -402,7 +407,7 @@ def cmd_run():
                     print(f"Event sequence unknown:\n    {seq_seen}\n   Try the 'record' command to add this.\nOr manually add a binding in {CONFIG_PATH}:\n{seq_str} = NAME")
                 else:
                     print(f"Low score {score[best_name]} -> {best_name} for event sequence:\n    {seq_seen}\n   Try adjustments in {CONFIG_PATH}")
-    
+
             except OSError as e:
                 if e.errno == 19:  # ENODEV - No such device
                     print("Device disappeared (BLE sleep)")
@@ -413,7 +418,7 @@ def cmd_run():
                     print("Device node disappeared (BLE sleep)")
                 else:
                     raise  # Re-raise other OS errors
-    
+
         if debug: print(" ... Closing ...")
         try:
             close_dev(km)
